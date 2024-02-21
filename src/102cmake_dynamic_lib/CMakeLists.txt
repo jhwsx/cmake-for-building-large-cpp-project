@@ -5,7 +5,7 @@ project(xlog)
 # 指定头文件查找路径
 include_directories("xlog")
 
-# 添加动态库
+# 添加动态库，项目自带预处理变量 xlog_EXPORTS
 add_library(xlog SHARED xlog/xlog.cpp)
 
 # 添加可执行程序
