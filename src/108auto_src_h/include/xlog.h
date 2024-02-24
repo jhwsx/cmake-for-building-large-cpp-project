@@ -3,4 +3,6 @@
 
 void xlog();
 
+void testxlog();
+
 #endif

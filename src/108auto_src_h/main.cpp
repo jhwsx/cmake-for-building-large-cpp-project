@@ -6,6 +6,7 @@
 int main(int argc, char const *argv[])
 {
     xlog();
+    testxlog();
     xthread();
     xtest();
     std::cout << "test auto source head\n";
