@@ -95,6 +95,7 @@ if(<variable>)
 如果给定一个定义为非假常量的值的变量，则为真否则为False，包括变量未定义时。
 宏参数不是变量。环境变量if(ENV{some var})总是会评估为假。
 ]]
+message("if variable example: ")
 if(VAR_NOT_DEF)
     message("VAR_NOT_DEF is true")
 else()
@@ -111,6 +112,7 @@ if(<string>)
 带引号的字符串计算为 false,除非字符串的值是真正的常量之一
 ]]
 
+message("if string example: ")
 if("TRUE")
     message("\"TRUE\" is true")
 endif()
@@ -127,5 +129,41 @@ if("test")
     message("\"test\" is true")
 else()
     message("\"test\" is false")
+endif()
+
+#[[
+逻辑运算符
+if(NOT <condition>)如果条件不为真，则为真。
+
+if(<cond1> AND <cond2>)如果两个条件都是真的，则为真。
+
+if(<cond1>0R<cond2>)如果任一条件是真的，则为真
+
+if((condition)AND(condition OR(condition))
+首先评估括号内的条件，然后评估其余条件.
+]]
+message("if logic example:")
+
+set(VAR_OFF OFF)
+if(NOT VAR_OFF)
+    message("NOT VAR_OFF is true")
+endif()
+
+if(TRUE AND ON)
+    message("TRUE AND ON is true")
+endif()
+
+if(TRUE AND OFF)
+    message("TRUE AND OFF is true")
+else()
+    message("TRUE AND OFF is false")
+endif()
+
+if(TRUE OR OFF)
+    message("TRUE OR OFF is true")
+endif()
+
+if(TRUE AND (OFF OR ON))
+    message("TRUE AND (OFF OR ON) is true")
 endif()
 
