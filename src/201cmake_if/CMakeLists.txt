@@ -89,3 +89,43 @@ if(-NOTFOUND)
 else()
     message("-NOTFOUND is false")
 endif()
+
+#[[
+if(<variable>)
+如果给定一个定义为非假常量的值的变量，则为真否则为False，包括变量未定义时。
+宏参数不是变量。环境变量if(ENV{some var})总是会评估为假。
+]]
+if(VAR_NOT_DEF)
+    message("VAR_NOT_DEF is true")
+else()
+    message("VAR_NOT_DEF is false")
+endif()
+
+set(VAR1_TRUE TRUE)
+if(VAR1_TRUE)
+    message("VAR!_TRUE is true")
+endif()
+
+#[[
+if(<string>)
+带引号的字符串计算为 false,除非字符串的值是真正的常量之一
+]]
+
+if("TRUE")
+    message("\"TRUE\" is true")
+endif()
+
+if("ON")
+    message("\"ON\" is true")
+endif()
+
+if("1")
+    message("\"1\" is true")
+endif()
+
+if("test")
+    message("\"test\" is true")
+else()
+    message("\"test\" is false")
+endif()
+
