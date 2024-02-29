@@ -167,3 +167,47 @@ if(TRUE AND (OFF OR ON))
     message("TRUE AND (OFF OR ON) is true")
 endif()
 
+message("if check and comparison example:")
+
+set(VAR_DEF OFF)
+if(DEFINED VAR_DEF)
+    message("VAR_DEF is defined")
+endif()
+
+if(DEFINED VAR_NOT_DEF)
+    message("VAR_NOT_DEF is defined")
+else()
+    message("VAR_NOT_DEF is not defined")
+endif()
+
+# 二元判断 EQUAL(判断数字相等) STREQUAL(判断字符串相等)
+set(VAR1 123)
+if (VAR1 EQUAL 123)
+    message("VAR1 EQUAL 123 is true")
+endif()
+set(VAR2 "test")
+if (VAR2 EQUAL "test")
+    message("VAR2 EQUAL test is true")
+else()
+    message("VAR2 EQUAL test is false")
+endif()
+
+if (VAR2 STREQUAL "test")
+    message("VAR2 STREQUAL test is true")
+endif()
+
+if (VAR1 STREQUAL 123)
+    message("VAR1 STREQUAL 123 is true")
+endif()
+
+# MATCHES
+set(STR1 "abcd1234")
+if(STR1 MATCHES "[a-z]+")
+    message("STR1 MATCHES \"[a-z]+\" is true")
+endif()
+
+if(STR1 MATCHES "^[a-z]+$")
+    message("STR1 MATCHES \"^[a-z]+$\" is true")
+else()
+    message("STR1 MATCHES \"^[a-z]+$\" is false")
+endif()
