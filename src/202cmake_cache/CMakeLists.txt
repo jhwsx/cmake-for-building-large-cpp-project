@@ -32,3 +32,16 @@ message("VAR1: ${VAR1}")
 # 强制修改缓存
 set(VAR1 "CACHE VAR1 VALUE1-3 FORCE" CACHE STRING "cache doc" FORCE)
 message("VAR1: ${VAR1}")
+
+# CACHE 变量 vs 普通变量
+# CACHE 变量的作用域是全局的，而且可以跨不同的执行
+# 普通变量的作用域是自身所在的模块及其子模块
+set(VAR_NORMAL "test normal")
+message("in main")
+message(STATUS "in main VAR_NORMAL = ${VAR_NORMAL}")
+add_subdirectory(sub1)
+add_subdirectory(sub2)
+# 父模块无法访问 sub1 中的普通变量
+message(STATUS "in main VAR_SUB1_NORMAL = ${VAR_SUB1_NORMAL}")
+# 父模块可以访问 sub1 中的缓存变量
+message(STATUS "in main VAR_SUB1_CACHE = ${VAR_SUB1_CACHE}")
