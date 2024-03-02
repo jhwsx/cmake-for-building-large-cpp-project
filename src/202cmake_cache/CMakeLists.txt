@@ -78,3 +78,6 @@ message("VAR_PATH = ${VAR_PATH}")
 set(VAR_INTERNAL "path" CACHE INTERNAL "var internal")
 message("VAR_INTERNAL = ${VAR_INTERNAL}")
 
+# option, 作为 BOOL 的简化
+option(OPT1 "opt1 doc" OFF)
+option(OPT2 "opt2 doc" ON)
