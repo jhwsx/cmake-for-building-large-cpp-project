@@ -45,3 +45,36 @@ add_subdirectory(sub2)
 message(STATUS "in main VAR_SUB1_NORMAL = ${VAR_SUB1_NORMAL}")
 # 父模块可以访问 sub1 中的缓存变量
 message(STATUS "in main VAR_SUB1_CACHE = ${VAR_SUB1_CACHE}")
+
+#[[
+		BOOL
+			ON/OFF 选择框
+		FILEPATH
+			文件选择
+		PATH
+			目录选择
+		STRING
+			字符串
+		INTERNAL
+			内部变量
+]]
+message("-----------test type using cmake-gui or ccmake-----------")
+
+# BOOL 勾选
+set(VAR_BOOL1 "ON" CACHE BOOL "VAR bool 001")
+set(VAR_BOOL2 "OFF" CACHE BOOL "VAR bool 002")
+message("VAR_BOOL1 = ${VAR_BOOL1}")
+message("VAR_BOOL2 = ${VAR_BOOL2}")
+
+# FILEPATH 选择文件
+set(VAR_FILEPATH "filepath" CACHE FILEPATH "var filepath")
+message("VAR_FILEPATH = ${VAR_FILEPATH}")
+
+# PATH 选择目录
+set(VAR_PATH "path" CACHE PATH "var path")
+message("VAR_PATH = ${VAR_PATH}")
+
+# 内部缓存变量，在 cmake-gui 或者 ccmake 中看不到
+set(VAR_INTERNAL "path" CACHE INTERNAL "var internal")
+message("VAR_INTERNAL = ${VAR_INTERNAL}")
+
