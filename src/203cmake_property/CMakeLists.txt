@@ -28,6 +28,13 @@ get_property(<variable>
               VARIABLE           >
              PROPERTY <name>
              [SET | DEFINED | BRIEF_DOCS | FULL_DOCS])
+
+define_property(<GLOBAL | DIRECTORY | TARGET | SOURCE |
+                 TEST | VARIABLE | CACHED_VARIABLE>
+                 PROPERTY <name> [INHERITED]
+                 [BRIEF_DOCS <brief-doc> [docs...] ]
+                 [FULL_DOCS <full-doc> [docs...] ]
+                 [INITIALIZE_FROM_VARIABLE <variable>])
 ]]
 
 # 全局属性，可以理解为一个没有缓存的全局变量
@@ -56,3 +63,41 @@ set_property(GLOBAL APPEND_STRING PROPERTY TEST_APPEND_STRING "append string 002
 set_property(GLOBAL APPEND_STRING PROPERTY TEST_APPEND_STRING "append string 003")
 get_property(val GLOBAL PROPERTY TEST_APPEND_STRING)
 message("TEST_APPEND_STRING = ${val}") # output: TEST_APPEND_STRING = append string 001append string 002append string 003
+
+message("define_property example:")
+# get_property SET | DEFINED
+set_property(GLOBAL PROPERTY P1 "p1")
+get_property(isP1Set GLOBAL PROPERTY P1 SET)
+message("isP1Set = ${isP1Set}")
+if(isP1Set)
+    message("P1 has been set")
+else()
+    message("P1 hasn't been set")
+endif()
+
+get_property(isP1Defined GLOBAL PROPERTY P1 DEFINED)
+if(isP1Defined)
+    message("P1 has been defined")
+else()
+    message("P1 hasn't been defined")
+endif()
+
+# 调用了 define_property 之后才可以看到被定义了
+define_property(GLOBAL PROPERTY P1)
+get_property(isP1Defined GLOBAL PROPERTY P1 DEFINED)
+if(isP1Defined)
+    message("P1 has been defined")
+else()
+    message("P1 hasn't been defined")
+endif()
+
+define_property(GLOBAL PROPERTY TEST_DEF BRIEF_DOCS "test def brief docs")
+get_property(isTestDefDefined GLOBAL PROPERTY TEST_DEF DEFINED)
+if(isTestDefDefined)
+    message("TEST_DEF has been defined")
+else()
+    message("TEST_DEF hasn't been defined")
+endif()
+# 获取概要说明
+get_property(briefDocs GLOBAL PROPERTY TEST_DEF BRIEF_DOCS)
+message("TEST_DEF brief docs: ${briefDocs}")
