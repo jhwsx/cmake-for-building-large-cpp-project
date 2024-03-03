@@ -17,7 +17,7 @@ set(<variable> <value>... CACHE <type> <docstring> [FORCE])
 	FORCE 
 		强制修改缓存，不设置第二次调用值不改
 ]]
-cmake_minimum_required(VERSION 3.20)
+cmake_minimum_required(VERSION 3.23)
 
 project(cmake_cache)
 
@@ -81,3 +81,30 @@ message("VAR_INTERNAL = ${VAR_INTERNAL}")
 # option, 作为 BOOL 的简化
 option(OPT1 "opt1 doc" OFF)
 option(OPT2 "opt2 doc" ON)
+
+# CMP0126 New in CMake 3.21
+
+# 普通变量
+set(NVAR1 "normal var1")
+
+# 设置缓存变量覆盖同名普通变量的策略
+# OLD 表示删除与缓存变量同名的普通变量
+# NEW 表示不删除与缓存变量同名的普通变量，访问缓存变量要用 $CACHE{var_name}
+cmake_policy(SET CMP0126 OLD)
+
+# cache 变量
+set(NVAR1 "cache var1" CACHE STRING "cache doc")
+
+# 先查找普通变量，普通变量有则结束；如果普通变量没有再查找缓存变量
+message("\${NVAR1} = ${NVAR1}")
+# 直接查找缓存变量
+message("\$CACHE{NVAR1} = $CACHE{NVAR1}")
+
+#[[
+OLD output:
+${NVAR1} = cache var1
+$CACHE{NVAR1} = cache var1
+NEW output:
+${NVAR1} = normal var1
+$CACHE{NVAR1} = cache var1
+]]
