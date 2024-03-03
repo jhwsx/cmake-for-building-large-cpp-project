@@ -108,3 +108,14 @@ NEW output:
 ${NVAR1} = normal var1
 $CACHE{NVAR1} = cache var1
 ]]
+
+# cmake 命令行传递缓存变量
+# cmake -B build -S . -D PARA1=para002 -D BUILD_SHARED_LIBS=ON
+# 为什么说传递过去的是缓存变量呢？
+# 第一次执行传可以看到打印，第二次不删 build 执行还可以看到打印。
+message("\ncmake cmd pass cache variable:")
+# 自定义的缓存变量
+message("PARA1 = ${PARA1}")
+# cmake 内置的缓存变量
+set(BUILD_SHARED_LIBS OFF CACHE BOOL "build so or a")
+message("BUILD_SHARED_LIBS = ${BUILD_SHARED_LIBS}")
