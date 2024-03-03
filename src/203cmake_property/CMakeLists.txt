@@ -37,6 +37,7 @@ define_property(<GLOBAL | DIRECTORY | TARGET | SOURCE |
                  [INITIALIZE_FROM_VARIABLE <variable>])
 ]]
 
+message("global property example:")
 # 全局属性，可以理解为一个没有缓存的全局变量
 # 设置全局属性
 set_property(GLOBAL PROPERTY TEST_GLOBAL "test global")
@@ -101,3 +102,31 @@ endif()
 # 获取概要说明
 get_property(briefDocs GLOBAL PROPERTY TEST_DEF BRIEF_DOCS)
 message("TEST_DEF brief docs: ${briefDocs}")
+
+message("\ndir property example: ")
+# 目录属性
+# 设置目录属性 DIR1
+set_property(DIRECTORY . PROPERTY DIR1 "dir001")
+get_property(val DIRECTORY . PROPERTY DIR1)
+message("DIR1 = ${val}")
+# 获取 sub1 目录设置的目录属性 DIR1
+get_property(val DIRECTORY sub1 PROPERTY DIR1)
+message("sub1 DIR1 = ${val}")
+
+message("\nfile property example: ")
+
+set_property(SOURCE main.cpp PROPERTY S1 "s1 value")
+get_property(val SOURCE main.cpp PROPERTY S1)
+message("SOURCE S1 = ${val}")
+
+# cmake 传递变量给 c++
+# cmake 预置属性 COMPILE_DEFINITIONS 传递预处理变量（宏变量）类似于 cmake -D PARA1=param1
+set_property(SOURCE main.cpp PROPERTY COMPILE_DEFINITIONS "PARA1=1234")
+
+add_executable(${PROJECT_NAME} main.cpp)
+
+#[[
+> ./cmake_property
+test cmake property
+PARA1 = 1234
+]]
