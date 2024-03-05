@@ -161,3 +161,34 @@ PARA4 = test_para4
 PARA5 = test_para5
 ]]
 # 查看一下生成过程，看如何传递的。
+
+# 打印属性和变量
+message("\nprint properties and variables example:")
+include(CMakePrintHelpers)
+#[[
+cmake_print_properties(<TARGETS       [<target1> ...] |
+                        SOURCES       [<source1> ...] |
+                        DIRECTORIES   [<dir1> ...]    |
+                        TESTS         [<test1> ...]   |
+                        CACHE_ENTRIES [<entry1> ...]  >
+                       PROPERTIES [<prop1> ...]         )
+cmake_print_variables(var1 var2 ..  varN)
+]]
+cmake_print_properties(SOURCES main.cpp PROPERTIES S1 COMPILE_DEFINITIONS)
+cmake_print_properties(TARGETS ${PROJECT_NAME} PROPERTIES TVAR COMPILE_DEFINITIONS)
+cmake_print_variables(CMAKE_C_COMPILER CMAKE_MAJOR_VERSION DOES_NOT_EXIST)
+#[[
+output:
+print properties and variables example:
+-- 
+ Properties for SOURCE main.cpp:
+   main.cpp.S1 = "s1 value"
+   main.cpp.COMPILE_DEFINITIONS = "PARA1=1234"
+
+-- 
+ Properties for TARGET cmake_property:
+   cmake_property.TVAR = "tval"
+   cmake_property.COMPILE_DEFINITIONS = "PARA3="test_para3";PARA4="test_para4";PARA5="test_para5""
+
+-- CMAKE_C_COMPILER="/usr/bin/cc" ; CMAKE_MAJOR_VERSION="3" ; DOES_NOT_EXIST=""
+]]
