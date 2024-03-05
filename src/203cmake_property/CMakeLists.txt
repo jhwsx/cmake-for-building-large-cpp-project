@@ -130,3 +130,34 @@ add_executable(${PROJECT_NAME} main.cpp)
 test cmake property
 PARA1 = 1234
 ]]
+
+# 目标属性
+# 目标必须已经存在
+message("\ntarget property example:")
+# 设置一个名字为 TVAR 的目标属性
+set_property(TARGET ${PROJECT_NAME} PROPERTY TVAR "tval")
+get_property(val TARGET ${PROJECT_NAME} PROPERTY TVAR)
+message("TVAR = ${val}")
+
+# 传递宏给 c++
+set_property(TARGET ${PROJECT_NAME} PROPERTY COMPILE_DEFINITIONS "PARA2=\"test_para2\"")
+# 再传递一个宏给 c++，但是这样会覆盖掉上面一个
+set_property(TARGET ${PROJECT_NAME} PROPERTY COMPILE_DEFINITIONS "PARA3=\"test_para3\"")
+#[[
+output:
+test cmake property
+PARA1 = 1234
+PARA3 = test_para3
+]]
+# 采用追加设置
+set_property(TARGET ${PROJECT_NAME} APPEND PROPERTY COMPILE_DEFINITIONS "PARA4=\"test_para4\"")
+set_property(TARGET ${PROJECT_NAME} APPEND_STRING PROPERTY COMPILE_DEFINITIONS "PARA5=\"test_para5\"")
+#[[
+output:
+test cmake property
+PARA1 = 1234
+PARA3 = test_para3
+PARA4 = test_para4
+PARA5 = test_para5
+]]
+# 查看一下生成过程，看如何传递的。
