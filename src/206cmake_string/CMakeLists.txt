@@ -65,3 +65,27 @@ out: [TEST CMAKE STRING]
 ]]
 
 
+set(STR2 "TEST CMAKE STRING")
+# 字符串追加
+# string(APPEND <string_variable> [<input>...])
+string(APPEND STR2 " append01" " append02")
+message("STR2: [${STR2}]")
+
+# 字符串替换
+# string(REPLACE <match_string> <replace_string> <output_variable> <input> [<input>...])
+string(REPLACE "append" "REPLACE" replacedStr2 ${STR2})
+message("replacedStr2: [${replacedStr2}]")
+
+# 正则表达式匹配
+# string(REGEX MATCH <regular_expression> <output_variable> <input> [<input>...])
+string(REGEX MATCH "[A-Z]+[0-9]+" out ${replacedStr2})
+message("out: [${out}]")
+
+#[[
+output:
+STR2: [TEST CMAKE STRING append01 append02]
+replacedStr2: [TEST CMAKE STRING REPLACE01 REPLACE02]
+out: [REPLACE01]
+]]
+
+
