@@ -88,4 +88,203 @@ replacedStr2: [TEST CMAKE STRING REPLACE01 REPLACE02]
 out: [REPLACE01]
 ]]
 
+message("\nstring JSON example:")
+# json
+#[[
+  string(JSON <out-var> [ERROR_VARIABLE <error-var>]
+         {GET | TYPE | LENGTH | REMOVE}
+         <json-string> <member|index> [<member|index> ...])
+  string(JSON <out-var> [ERROR_VARIABLE <error-var>]
+         MEMBER <json-string>
+         [<member|index> ...] <index>)
+  string(JSON <out-var> [ERROR_VARIABLE <error-var>]
+         SET <json-string>
+         <member|index> [<member|index> ...] <value>)
+  string(JSON <out-var> [ERROR_VARIABLE <error-var>]
+         EQUAL <json-string1> <json-string2>)
+]]
+
+set(tjson
+[=[
+{
+    "webs":{
+        "web":[
+            {
+                "name":"cmake",
+                "url":"cmake.org.cn"
+            },
+            {
+                "name":"ffmpeg",
+                "url":"ffmpeg.club"
+            }
+        ]
+    }
+}
+]=]
+)
+message("tjson: ${tjson}")
+#[[
+string(JSON <out-var> [ERROR_VARIABLE <error-variable>] GET <json-string> <member|index> [<member|index> ...])
+]]
+# 访问 webs -> web[0] -> name
+string(JSON out_var ERROR_VARIABLE error_var GET ${tjson} webs web 0 name)
+if(error_var)
+    message("GET error: ${error_var}")
+else()
+    message("GET webs web 0 name: ${out_var}")
+endif()
+
+# 访问 webs -> web[1] -> url
+string(JSON out_var ERROR_VARIABLE error_var GET ${tjson} webs web 1 url)
+message("GET error: ${error_var}")
+if(error_var)
+    message("GET error: ${error_var}")
+else()
+    message("GET webs web 1 url: ${out_var}")
+endif()
+
+# 访问 webs -> web[2] 访问失败
+string(JSON out_var ERROR_VARIABLE error_var GET ${tjson} webs web 2)
+message("GET error: ${error_var}")
+if(error_var)
+    message("GET error: ${error_var}")
+else()
+    message("GET webs web 2: ${out_var}")
+endif()
+
+#[[
+output:
+webs web 0 name: cmake
+error: NOTFOUND
+webs web 1 url: ffmpeg.club
+error: expected an index less than 2 got '2'
+error: expected an index less than 2 got '2'
+]]
+
+set(twrongjson
+[=[
+{
+    "webs":{
+       12345 
+    }
+}
+]=]
+)
+
+string(JSON out_var ERROR_VARIABLE error_var GET ${twrongjson} webs)
+if(error_var)
+    message("GET error: ${error_var}")
+else()
+    message("GET webs: ${out_var}")
+endif()
+
+#[[
+output: 
+error: failed parsing json string: * Line 3, Column 8
+  Missing '}' or object member name.
+]]
+
+# 获取元素的类型
+#[[
+string(JSON <out-var> [ERROR_VARIABLE <error-variable>] TYPE <json-string> <member|index> [<member|index> ...])
+]]
+string(JSON out_var ERROR_VARIABLE error_var TYPE ${tjson} webs)
+message("TYPE webs: ${out_var}")
+# TYPE webs: OBJECT
+
+# 获取 json 数组长度
+#[[
+string(JSON <out-var> [ERROR_VARIABLE <error-variable>] LENGTH <json-string> [<member|index> ...])
+]]
+string(JSON arr_len ERROR_VARIABLE error_var LENGTH ${tjson} webs web)
+message("LENGTH web: ${arr_len}")
+# LENGTH web: 2
+
+# json 的增加
+#[[
+string(JSON <out-var> [ERROR_VARIABLE <error-variable>] SET <json-string> <member|index> [<member|index> ...] <value>)
+]]
+string(JSON add_json ERROR_VARIABLE error_var SET ${tjson} webs web 2 [=[
+{
+    "name":"c",
+    "url":"c.org"
+}
+]=])
+message("SET add_json: ${add_json}")
+#[[
+SET add_json: {
+  "webs" : 
+  {
+    "web" : 
+    [
+      {
+        "name" : "cmake",
+        "url" : "cmake.org.cn"
+      },
+      {
+        "name" : "ffmpeg",
+        "url" : "ffmpeg.club"
+      },
+      {
+        "name" : "c",
+        "url" : "c.org"
+      }
+    ]
+  }
+}
+]]
+
+# json 的修改
+string(JSON modified_json ERROR_VARIABLE error_var SET ${tjson} webs web 1 [=[
+{
+    "name":"ffmpeg",
+    "url":"ffmpeg.org"
+}
+]=])
+message("SET modified_json: ${modified_json}")
+#[[
+SET modified_json: {
+  "webs" : 
+  {
+    "web" : 
+    [
+      {
+        "name" : "cmake",
+        "url" : "cmake.org.cn"
+      },
+      {
+        "name" : "ffmpeg",
+        "url" : "ffmpeg.org"
+      }
+    ]
+  }
+}
+]]
+
+# json 的 删除
+#[[
+string(JSON <out-var> [ERROR_VARIABLE <error-variable>] REMOVE <json-string> <member|index> [<member|index> ...])
+]]
+string(JSON remove_json ERROR_VARIABLE error_var REMOVE ${tjson} webs web 0)
+message("REMOVE remove_json: ${remove_json}")
+string(JSON remove_json ERROR_VARIABLE error_var REMOVE ${remove_json} webs web)
+message("REMOVE remove_json: ${remove_json}")
+#[[
+output:
+REMOVE remove_json: {
+  "webs" : 
+  {
+    "web" : 
+    [
+      {
+        "name" : "ffmpeg",
+        "url" : "ffmpeg.club"
+      }
+    ]
+  }
+}
+REMOVE remove_json: {
+  "webs" : {}
+}
+]]
 
