@@ -128,3 +128,18 @@ foreach(var RANGE 100)
 endforeach()
 message("sum: ${sum}") # 55
 
+#[[
+while(<condition>)
+  <commands>
+endwhile()
+]]
+set(counter 1)
+set(sum 0)
+while(1)
+    if(counter GREATER 10)
+        break()
+    endif()
+    math(EXPR sum "${sum} + ${counter}")
+    math(EXPR counter "${counter} + 1")
+endwhile()
+message("sum: ${sum}") # 55
