@@ -2,6 +2,8 @@ cmake_minimum_required(VERSION 3.20)
 
 project(xlog)
 
+set(CMAKE_VERBOSE_MAKEFILE ON)
+
 # 指定头文件查找路径
 include_directories("xlog")
 

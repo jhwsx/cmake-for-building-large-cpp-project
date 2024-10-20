@@ -6,7 +6,7 @@ project(test_xlog)
 # 指定头文件查找路径
 include_directories("../xlog")
 
-# 指定库文件查找路径
+# 指定库文件查找路径 windows 自动找 ../xlog/build/Debug ../xlog/build/Release
 link_directories("../xlog/build")
 
 # 添加可执行文件

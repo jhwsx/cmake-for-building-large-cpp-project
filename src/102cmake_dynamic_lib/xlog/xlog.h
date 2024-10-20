@@ -5,9 +5,9 @@
     #define XCPP_API
 #else
     // windows encoding use utf-8 with BOM
-    // __declspec(dllexport) 到处 XLog 类 的函数到 lib 文件中
+    // __declspec(dllexport) 导出 XLog 类 的函数到 lib 文件中
     // xlog 库文件调用时，做 dllexport
-    // test_xlog 库文件调用时，做 dllimport
+    // test_xlog 程序调用时，做 dllimport
     #ifdef xlog_EXPORTS
         #define XCPP_API __declspec(dllexport)
     #else
