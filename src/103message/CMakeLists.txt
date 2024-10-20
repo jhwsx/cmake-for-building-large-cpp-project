@@ -16,7 +16,7 @@ message("参数p1" "参数p2" #[[注释在message中]] "参数p3" 123 测试)
 # message(FATAL_ERROR "TEST FATAL ERROR")
 
 # CMake 进程继续，生成退出(生成如 add_executable add_library) , 会打印 CMake 路径和行号，标准错误输出
-message(SEND_ERROR "TEST SEND ERROR")
+# message(SEND_ERROR "TEST SEND ERROR")
 add_executable(test_message test_message.cpp)
 message("after ERROR")
 
@@ -48,3 +48,30 @@ message(DEBUG "test DEBUG")
 
 # TRACE 加前缀 --, 默认不显示，非常低级实现细节的细粒度信息，标准输出
 message(TRACE "test TRACE")
+
+# 2.4 message reporting checks 查找库日志
+message("2.4 message reporting checks 查找库日志:")
+#[[
+CHECK_START 开始记录将要执行检查的消息
+CHECK_PASS 记录检查的成功结果
+CHECK_FAIL 记录检查的失败结果
+]]
+# 开始查找
+message(CHECK_START "find xcpp")
+# 查找 xcpp 库的代码
+# 嵌套查找
+# message 消息缩进
+set(CMAKE_MESSAGE_INDENT "\t")
+message(CHECK_START "find xlog")
+# 查找 xlog 库的代码
+# 再嵌套查找
+set(CMAKE_MESSAGE_INDENT "\t\t")
+message(CHECK_START "find xthreadpool")
+# 查找 xthreadpool 库的代码
+message(CHECK_FAIL "Not found.")
+# 结束查找 查找成功
+set(CMAKE_MESSAGE_INDENT "\t")
+message(CHECK_PASS "Found.")
+# 结束查找 查找失败
+set(CMAKE_MESSAGE_INDENT "")
+message(CHECK_FAIL "Not found.")
