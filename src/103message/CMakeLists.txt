@@ -43,8 +43,8 @@ message(VERBOSE "TEST VERBOSE")
 # 把所有输出重定向到文件
 # cmake -S . -B build --log-level=VERBOSE >log.txt 2>&1
 
-# DEBUG 加前缀 --, 默认不显示, 调试信息，标准输出
+# DEBUG 加前缀 --, 默认不显示, 项目本身的开发人员使用的信息，标准输出
 message(DEBUG "test DEBUG")
 
-# TRACE 加前缀 --, 默认不显示，详细信息，标准输出
+# TRACE 加前缀 --, 默认不显示，非常低级实现细节的细粒度信息，标准输出
 message(TRACE "test TRACE")
