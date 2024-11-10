@@ -16,7 +16,7 @@
         #else
             #define XCPP_API __declspec(dllimport)
         #endif
-    #endif
+    #endif // for xlog_STATIC
    
 #endif // for _WIN32
 
