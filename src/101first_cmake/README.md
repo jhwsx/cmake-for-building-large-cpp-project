@@ -8,4 +8,4 @@ cmake 命令实现程序的分步生成
 汇编：cmake --build build --target 101first_cmake.o
 链接：cmake --build build --target first_cmake
 清理：cmake --build build --target clean
-windows 下要使用 nmake
+windows 下要使用 nmake, 指定 cmake -B build -S . -G "NMake Makefiles"
