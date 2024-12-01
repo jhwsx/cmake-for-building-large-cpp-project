@@ -107,6 +107,13 @@ if(VAR1_TRUE)
     message("VAR!_TRUE is true")
 endif()
 
+set(MY_ENV_VAR "some_value" ENV)
+if(ENV{MY_ENV_VAR})
+    message("MY_ENV_VAR is true")
+else()
+    message("MY_ENV_VAR is false")
+endif()
+
 #[[
 if(<string>)
 带引号的字符串计算为 false,除非字符串的值是真正的常量之一
@@ -167,6 +174,18 @@ if(TRUE AND (OFF OR ON))
     message("TRUE AND (OFF OR ON) is true")
 endif()
 
+#[[
+Existence Checks
+if(COMMAND <command-name>)
+if(POLICY <policy-id>)
+if(TARGET <target-name>)
+if(TEST <test-name>)
+if(DEFINED <name>|CACHE{<name>}|ENV{<name>})
+if(<variable|string> IN_LIST <variable>)
+File Operations
+if(EXISTS <path-to-file-or-directory>)
+if(IS_DIRECTORY <path>)
+]]
 message("if check and comparison example:")
 
 set(VAR_DEF OFF)
@@ -178,6 +197,14 @@ if(DEFINED VAR_NOT_DEF)
     message("VAR_NOT_DEF is defined")
 else()
     message("VAR_NOT_DEF is not defined")
+endif()
+
+if(EXISTS ${CMAKE_SOURCE_DIR})
+    message("${CMAKE_SOURCE_DIR} exists")
+endif()
+
+if(IS_DIRECTORY ${MY_DIR})
+    message("${MY_DIR} is a directory")
 endif()
 
 # 二元判断 EQUAL(判断数字相等) STREQUAL(判断字符串相等)
@@ -210,4 +237,15 @@ if(STR1 MATCHES "^[a-z]+$")
     message("STR1 MATCHES \"^[a-z]+$\" is true")
 else()
     message("STR1 MATCHES \"^[a-z]+$\" is false")
+endif()
+
+set(STR2 "abcd")
+if(STR2 MATCHES "[a-z]+")
+    message("STR2 MATCHES \"[a-z]+\" is true")
+endif()
+
+if(STR2 MATCHES "^[a-z]+$")
+    message("STR2 MATCHES \"^[a-z]+$\" is true")
+else()
+    message("STR2 MATCHES \"^[a-z]+$\" is false")
 endif()
