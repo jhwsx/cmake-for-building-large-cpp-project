@@ -1,5 +1,6 @@
 cmake -B build -S . -G "Ninja"
 cmake --build build -j32
+cmake --build build -?
 
 cmake 命令实现程序的分步生成
 查看目标：cmake --build build --target help
