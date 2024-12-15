@@ -9,10 +9,12 @@ project(cmake_env)
 # 4. 环境变量只影响当前的 CMake 进程，不影响调用 CMake 的进程，也不影响整个系统环境，也不
 #    影响后续构建或者测试进程的环境。
 
-# CMake 预置环境变量
+# 三种环境变量
+# 1. CMake 预置环境变量
 message("CMAKE_INCLUDE_PATH = $ENV{CMAKE_INCLUDE_PATH}")
 message("CMAKE_PREFIX_PATH = $ENV{CMAKE_PREFIX_PATH}")
-# 自定义环境变量
+
+# 2. 自定义环境变量
 # 设置环境变量
 set(ENV{MYENV} "test env value")
 # 访问环境变量
@@ -22,6 +24,7 @@ message("MYENV = $ENV{MYENV}")
 add_subdirectory(sub1)
 message("SUB_ENV = $ENV{SUB_ENV}")
 
-# 系统环境变量
+# 3. 系统环境变量, 在 linux 命令行中输入 env 查看所有的环境变量
 message("USER = $ENV{USER}")
 message("PATH = $ENV{PATH}")
+message("HOME = $ENV{HOME}")
