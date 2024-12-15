@@ -3,6 +3,7 @@ cmake_minimum_required(VERSION 3.22)
 project(cmake_string)
 
 # 查找和替换
+message(STATUS "Search, Replace, Manipulation example:")
 #[[
 string(FIND <string> <substring> <output_variable> [REVERSE])
 ]]
@@ -18,7 +19,7 @@ set(ESTR "end")
 # 在 STR1 中查找 ESTR 的位置存入 e
 string(FIND ${STR1} ${ESTR} e)
 message("find ESTR positon in STR1: ${e}")
-# output: find ESTR positon in STR1: 26
+# output: find ESTR positon in STR1: 25
 
 # 计算 "begin" 的长度 
 #  string(LENGTH <string> <out-var>)
@@ -54,8 +55,8 @@ message("out: [${out}]")
 
 #[[
 output:
-find BSTR positon in STR1: 2
-find ESTR positon in STR1: 25
+find BSTR position in STR1: 2
+find ESTR position in STR1: 25
 b_end: 7
 sublen: 18
 substr: [ test make string ]
@@ -64,6 +65,7 @@ newsubstr: [test cmake string]
 out: [TEST CMAKE STRING]
 ]]
 
+message(STATUS "Append, Replace, Regex example:")
 
 set(STR2 "TEST CMAKE STRING")
 # 字符串追加
@@ -88,7 +90,7 @@ replacedStr2: [TEST CMAKE STRING REPLACE01 REPLACE02]
 out: [REPLACE01]
 ]]
 
-message("\nstring JSON example:")
+message(STATUS "JSON example(cmake 3.19):")
 # json
 #[[
   string(JSON <out-var> [ERROR_VARIABLE <error-var>]
@@ -200,6 +202,7 @@ string(JSON arr_len ERROR_VARIABLE error_var LENGTH ${tjson} webs web)
 message("LENGTH web: ${arr_len}")
 # LENGTH web: 2
 
+# json 的增加和修改操作都是用 SET 命令
 # json 的增加
 #[[
 string(JSON <out-var> [ERROR_VARIABLE <error-variable>] SET <json-string> <member|index> [<member|index> ...] <value>)
@@ -287,4 +290,21 @@ REMOVE remove_json: {
   "webs" : {}
 }
 ]]
+# json 的比较
+set(json1 [=[
+{
+    "name":"cmake",
+    "url":"cmake.org.cn"
+}
+]=])
 
+set(json2 [=[
+{
+    "name":"cmake",
+    "url":"cmake.org.cn"
+}
+]=])
+
+string(JSON out_var ERROR_VARIABLE error_var EQUAL ${json1} ${json2})
+message("EQUAL out_var: ${out_var}")
+# EQUAL out_var: ON
