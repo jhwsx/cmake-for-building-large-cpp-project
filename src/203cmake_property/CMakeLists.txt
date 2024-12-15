@@ -1,6 +1,8 @@
 #203cmake_property/CMakeLists.txt
 cmake_minimum_required(VERSION 3.20)
 project(cmake_property)
+# 属性对应于 c++ 里面的成员变量, 属性是以作用域为目标的变量
+# 变量对应于 c++ 里面的全局变量
 #[[
 set_property(<GLOBAL                      |
               DIRECTORY [<dir>]           |
@@ -37,7 +39,7 @@ define_property(<GLOBAL | DIRECTORY | TARGET | SOURCE |
                  [INITIALIZE_FROM_VARIABLE <variable>])
 ]]
 
-message("global property example:")
+message(STATUS "global property example:")
 # 全局属性，可以理解为一个没有缓存的全局变量
 # 设置全局属性
 set_property(GLOBAL PROPERTY TEST_GLOBAL "test global")
@@ -65,7 +67,7 @@ set_property(GLOBAL APPEND_STRING PROPERTY TEST_APPEND_STRING "append string 003
 get_property(val GLOBAL PROPERTY TEST_APPEND_STRING)
 message("TEST_APPEND_STRING = ${val}") # output: TEST_APPEND_STRING = append string 001append string 002append string 003
 
-message("define_property example:")
+message(STATUS "define_property example:")
 # get_property SET | DEFINED
 set_property(GLOBAL PROPERTY P1 "p1")
 get_property(isP1Set GLOBAL PROPERTY P1 SET)
@@ -77,6 +79,7 @@ else()
 endif()
 
 get_property(isP1Defined GLOBAL PROPERTY P1 DEFINED)
+message("isP1Defined = ${isP1Defined}")
 if(isP1Defined)
     message("P1 has been defined")
 else()
@@ -86,14 +89,16 @@ endif()
 # 调用了 define_property 之后才可以看到被定义了
 define_property(GLOBAL PROPERTY P1)
 get_property(isP1Defined GLOBAL PROPERTY P1 DEFINED)
+message("isP1Defined = ${isP1Defined}")
 if(isP1Defined)
     message("P1 has been defined")
 else()
     message("P1 hasn't been defined")
 endif()
 
-define_property(GLOBAL PROPERTY TEST_DEF BRIEF_DOCS "test def brief docs")
+define_property(GLOBAL PROPERTY TEST_DEF BRIEF_DOCS "test def brief docs" FULL_DOCS "test def full docs")
 get_property(isTestDefDefined GLOBAL PROPERTY TEST_DEF DEFINED)
+message("isTestDefDefined = ${isTestDefDefined}")
 if(isTestDefDefined)
     message("TEST_DEF has been defined")
 else()
@@ -102,19 +107,25 @@ endif()
 # 获取概要说明
 get_property(briefDocs GLOBAL PROPERTY TEST_DEF BRIEF_DOCS)
 message("TEST_DEF brief docs: ${briefDocs}")
+get_property(fullDocs GLOBAL PROPERTY TEST_DEF FULL_DOCS)
+message("TEST_DEF full docs: ${fullDocs}")
 
-message("\ndir property example: ")
+message(STATUS "dir property example: ")
 # 目录属性
+# 不同的目录可以使用同样的目录属性名字
 # 设置目录属性 DIR1
 set_property(DIRECTORY . PROPERTY DIR1 "dir001")
 get_property(val DIRECTORY . PROPERTY DIR1)
 message("DIR1 = ${val}")
+
+add_subdirectory(sub2)
+
 # 获取 sub1 目录设置的目录属性 DIR1
-get_property(val DIRECTORY sub1 PROPERTY DIR1)
-message("sub1 DIR1 = ${val}")
+get_property(val DIRECTORY sub2 PROPERTY DIR1)
+message("sub2 DIR1 = ${val}")
 
-message("\nfile property example: ")
-
+message(STATUS "file property example: ")
+# 文件属性
 set_property(SOURCE main.cpp PROPERTY S1 "s1 value")
 get_property(val SOURCE main.cpp PROPERTY S1)
 message("SOURCE S1 = ${val}")
@@ -133,7 +144,7 @@ PARA1 = 1234
 
 # 目标属性
 # 目标必须已经存在
-message("\ntarget property example:")
+message(STATUS "target property example:")
 # 设置一个名字为 TVAR 的目标属性
 set_property(TARGET ${PROJECT_NAME} PROPERTY TVAR "tval")
 get_property(val TARGET ${PROJECT_NAME} PROPERTY TVAR)
@@ -160,11 +171,11 @@ PARA3 = test_para3
 PARA4 = test_para4
 PARA5 = test_para5
 ]]
-# 查看一下生成过程，看如何传递的。
+# 查看一下生成过程，看如何传递的: cmake --build build -v。
 
 # 打印属性和变量
-message("\nprint properties and variables example:")
-include(CMakePrintHelpers)
+message(STATUS "print properties and variables example:")
+include(CMakePrintHelpers) # 导入 CMakePrintHelpers 模块
 #[[
 cmake_print_properties(<TARGETS       [<target1> ...] |
                         SOURCES       [<source1> ...] |
@@ -177,9 +188,11 @@ cmake_print_variables(var1 var2 ..  varN)
 cmake_print_properties(SOURCES main.cpp PROPERTIES S1 COMPILE_DEFINITIONS)
 cmake_print_properties(TARGETS ${PROJECT_NAME} PROPERTIES TVAR COMPILE_DEFINITIONS)
 cmake_print_variables(CMAKE_C_COMPILER CMAKE_MAJOR_VERSION DOES_NOT_EXIST)
+cmake_print_properties(DIRECTORIES . PROPERTIES DIR1)
+cmake_print_properties(DIRECTORIES sub2 PROPERTIES DIR1)
 #[[
 output:
-print properties and variables example:
+-- print properties and variables example:
 -- 
  Properties for SOURCE main.cpp:
    main.cpp.S1 = "s1 value"
@@ -191,4 +204,11 @@ print properties and variables example:
    cmake_property.COMPILE_DEFINITIONS = "PARA3="test_para3";PARA4="test_para4";PARA5="test_para5""
 
 -- CMAKE_C_COMPILER="/usr/bin/cc" ; CMAKE_MAJOR_VERSION="3" ; DOES_NOT_EXIST=""
+-- 
+ Properties for DIRECTORY .:
+   ..DIR1 = "dir001"
+
+-- 
+ Properties for DIRECTORY sub2:
+   sub2.DIR1 = "sub2 dir1"
 ]]
