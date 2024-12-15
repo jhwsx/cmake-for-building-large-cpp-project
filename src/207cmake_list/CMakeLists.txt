@@ -2,6 +2,8 @@
 cmake_minimum_required(VERSION 3.20.0)
 project(cmake_list)
 
+# https://cmake.org/cmake/help/latest/command/list.html
+
 set(myList "a;list;of;five;elements")
 # 通过传递一个不加引号的 myList 引用，可以有效地向指令传递更多的参数 :
 message("the list is:" ${myList}) # the list is:alistoffiveelements
@@ -81,7 +83,7 @@ message("REMOVE_AT: ${removeAtList}") # REMOVE_AT: b;c;d;e
 set(removeDuplicatesList a a b c b c d d)
 list(REMOVE_DUPLICATES removeDuplicatesList)
 message("REMOVE_DUPLICATES: ${removeDuplicatesList}") # REMOVE_DUPLICATES: a;b;c;d
-# list(TRANSFORM <list> <ACTION> [<SELECTOR>] [OUTPUT_VARIABLE <output variable>])¶
+# list(TRANSFORM <list> <ACTION> [<SELECTOR>] [OUTPUT_VARIABLE <output variable>])
 # list(TRANSFORM <list> (APPEND|PREPEND) <value> ...)
 set(transformAppendList a b c d)
 list(TRANSFORM transformAppendList APPEND > OUTPUT_VARIABLE outList)
