@@ -77,6 +77,10 @@ ARGV3=3.14
 ]]
 
 #[[
+https://cmake.org/cmake/help/latest/command/cmake_parse_arguments.html#command:cmake_parse_arguments
+
+解析函数或者宏的参数
+
 cmake_parse_arguments(<prefix> <options> <one_value_keywords>
                       <multi_value_keywords> <args>...)
 prefix 生成变量的前缀
@@ -119,30 +123,48 @@ macro(my_install)
     set(options OPTIONAL FAST)
     set(oneValueArgs DESTINATION RENAME)
     set(multiValueArgs TARGETS CONFIGURATIONS)
-    cmake_parse_arguments(MY_INSTALL "${options}" "${oneValueArgs}"
+    cmake_parse_arguments(arg_my_install "${options}" "${oneValueArgs}"
         "${multiValueArgs}" ${ARGN})
-    message("MY_INSTALL_OPTIONAL = ${MY_INSTALL_OPTIONAL}")
-    message("MY_INSTALL_FAST = ${MY_INSTALL_FAST}")
-    message("MY_INSTALL_DESTINATION = ${MY_INSTALL_DESTINATION}")
-    message("MY_INSTALL_RENAME = ${MY_INSTALL_RENAME}")
-    message("MY_INSTALL_TARGETS = ${MY_INSTALL_TARGETS}")
-    message("MY_INSTALL_CONFIGURATIONS = ${MY_INSTALL_CONFIGURATIONS}")
-    message("MY_INSTALL_UNPARSED_ARGUMENTS = ${MY_INSTALL_UNPARSED_ARGUMENTS}")
-    message("MY_INSTALL_KEYWORDS_MISSING_VALUES = ${MY_INSTALL_KEYWORDS_MISSING_VALUES}")
+    message("arg_my_install_OPTIONAL = ${arg_my_install_OPTIONAL}")
+    message("arg_my_install_FAST = ${arg_my_install_FAST}")
+    message("arg_my_install_DESTINATION = ${arg_my_install_DESTINATION}")
+    message("arg_my_install_RENAME = ${arg_my_install_RENAME}")
+    message("arg_my_install_TARGETS = ${arg_my_install_TARGETS}")
+    message("arg_my_install_CONFIGURATIONS = ${arg_my_install_CONFIGURATIONS}")
+    message("arg_my_install_UNPARSED_ARGUMENTS = ${arg_my_install_UNPARSED_ARGUMENTS}")
+    message("arg_my_install_KEYWORDS_MISSING_VALUES = ${arg_my_install_KEYWORDS_MISSING_VALUES}")
 endmacro()
 my_install(TARGETS foo bar DESTINATION bin OPTIONAL blub CONFIGURATIONS)
+
+macro(my_special_install)
+    message("ARGN = ${ARGN}") 
+    set(options OPTIONAL FAST)
+    set(oneValueArgs DESTINATION RENAME)
+    set(multiValueArgs TARGETS CONFIGURATIONS)
+    cmake_parse_arguments(arg_my_special_install "${options}" "${oneValueArgs}"
+        "${multiValueArgs}" ${ARGN})
+    message("arg_my_special_install_OPTIONAL = ${arg_my_special_install_OPTIONAL}")
+    message("arg_my_special_install_FAST = ${arg_my_special_install_FAST}")
+    message("arg_my_special_install_DESTINATION = ${arg_my_special_install_DESTINATION}")
+    message("arg_my_special_install_RENAME = ${arg_my_special_install_RENAME}")
+    message("arg_my_special_install_TARGETS = ${arg_my_special_install_TARGETS}")
+    message("arg_my_special_install_CONFIGURATIONS = ${arg_my_special_install_CONFIGURATIONS}")
+    message("arg_my_special_install_UNPARSED_ARGUMENTS = ${arg_my_special_install_UNPARSED_ARGUMENTS}")
+    message("arg_my_special_install_KEYWORDS_MISSING_VALUES = ${arg_my_special_install_KEYWORDS_MISSING_VALUES}")
+endmacro()
+my_special_install(TARGETS barry DESTINATION sbin RENAME FAST)
 
 macro(my_intro)
     set(options ADULT)
     set(oneValueArgs NAME AGE)
-    set(multiValueArgs SCORE)
+    set(multiValueArgs SCORES)
 
     cmake_parse_arguments(STUDENT "${options}" "${oneValueArgs}" "${multiValueArgs}" ${ARGN})
 
     message("STUDENT_ADULT = ${STUDENT_ADULT}")
     message("STUDENT_NAME = ${STUDENT_NAME}")
     message("STUDENT_AGE = ${STUDENT_AGE}")
-    message("STUDENT_SCORE = ${STUDENT_SCORE}")
+    message("STUDENT_SCORES = ${STUDENT_SCORES}")
 endmacro()
-
-my_intro(ADULT NAME peter AGE 18 SCORE 100 97 100 96)
+set(SCORES 100 97 100 96)
+my_intro(ADULT NAME peter AGE 18 SCORES ${SCORES})
