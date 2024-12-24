@@ -2,10 +2,12 @@
 cmake_minimum_required(VERSION 3.22)
 project(cmake_function)
 
+# https://cmake.org/cmake/help/latest/command/function.html
+
 message(STATUS "function basic:")
 # function basic
 macro(macro1 arg1 arg2)
-    if(arg2)
+    if(arg2) # 会完整替换为 arg2, arg2 未定义，所以该 if 语句不会执行
         message("IN macro1 arg2 is TRUE")
     endif()
 endmacro()
@@ -15,6 +17,7 @@ function(func1 arg1 arg2)
     if(arg2)
         message("IN function1 arg2 is TRUE")
     endif()
+    # 在函数中，ARGN 是可以作为变量来使用的; 在宏中呢？自己对比一下。
     foreach(var IN LISTS ARGN) # 打印所有变参
         message("IN function1 var = ${var}")
     endforeach()

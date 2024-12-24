@@ -13,6 +13,12 @@ endmacro()
 my_macro()
 My_macro()
 message("RET = ${RET}")
+#[[
+output:
+in my macro
+in my macro
+RET = 1
+]]
 
 # 定义一个固定参数数目的宏演示宏参数传递: 不可以传递少于参数个数的参数
 macro(foo arg1 arg2)
@@ -22,6 +28,11 @@ endmacro()
 # foo(1) # foo Macro invoked with incorrect arguments for macro named: foo
 foo(1 2)
 foo(1 2 3)
+#[[
+output:
+arg1 = 1 arg2 = 2
+arg1 = 1 arg2 = 2
+]]
 
 # 定义一个固定参数数目的宏演示宏参数不是变量
 macro(foo1 arg1 arg2)
@@ -33,6 +44,11 @@ macro(foo1 arg1 arg2)
     endif()
 endmacro()
 foo1(TRUE 2)
+
+#[[
+output:
+${arg1} is matched
+]]
 
 # 定义一个可变参数的宏
 macro(foo2)
@@ -58,12 +74,6 @@ endmacro()
 foo2(1 TRUE "hello" 3.14)
 
 #[[
-in my macro
-in my macro
-RET = 1
-arg1 = 1 arg2 = 2
-arg1 = 1 arg2 = 2
-${arg1} is matched
 ARGC = 4
 ARGN = 1;TRUE;hello;3.14
 var = 1
