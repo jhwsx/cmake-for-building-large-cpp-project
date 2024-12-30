@@ -82,3 +82,20 @@ message("CMAKE_SYSTEM_NAME = ${CMAKE_SYSTEM_NAME}")
 set(LIB3 OFF)
 # target_include_directories(${PROJECT_NAME} PUBLIC "$<IF:$<BOOL:${LIB3}>,STATIC,SHARED>") # output: SHARED
 
+# 转换大小写
+set(name "Wzc")
+set(exp "$<LOWER_CASE:${name}>")
+# target_include_directories(${PROJECT_NAME} PUBLIC ${exp}) # output: wzc
+set(exp2 "$<STREQUAL:$<LOWER_CASE:${name}>,wzc>")
+# target_include_directories(${PROJECT_NAME} PUBLIC ${exp2}) # output: 1
+
+# 目标相关查询
+set(exp "$<TARGET_FILE:${PROJECT_NAME}>")
+add_custom_target(gen2 COMMAND ${CMAKE_COMMAND} -E echo "${exp}")
+
+# 获取目标的属性
+set(exp "$<TARGET_PROPERTY:${PROJECT_NAME},NAME>")
+add_custom_target(gen3 COMMAND ${CMAKE_COMMAND} -E echo "${exp}")
+
+
+
