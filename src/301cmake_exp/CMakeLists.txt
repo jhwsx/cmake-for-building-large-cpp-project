@@ -55,3 +55,30 @@ cmake --build build --target gen
 output:
 STATIC
 ]]
+
+
+# 字符串比较
+# $<STREQUAL:string1,string2>
+# $<EQUAL:value1,value2>
+# target_include_directories(${PROJECT_NAME} PUBLIC "$<STREQUAL:string1,string1>") # output: 1
+# target_include_directories(${PROJECT_NAME} PUBLIC "$<STREQUAL:string1,string2>") # output: 0
+# target_include_directories(${PROJECT_NAME} PUBLIC "$<EQUAL:123,1>") # output: 0
+# target_include_directories(${PROJECT_NAME} PUBLIC "$<EQUAL:123,123>") # output: 1
+
+# 变量查询
+# $<CONFIG:cfgs>
+# cmake -B build -S . -DCMAKE_BUILD_TYPE=Debug
+# target_include_directories(${PROJECT_NAME} PUBLIC "$<CONFIG>") # output: Debug
+# 判断配置项是不是在 cfgs 列表中
+# 配置项是 Debug, Release 之一，则返回 1
+# target_include_directories(${PROJECT_NAME} PUBLIC "$<CONFIG:Debug,Release>") # output: 1
+
+# $<PLATFORM_ID:platform_ids> 系统名称
+message("CMAKE_SYSTEM_NAME = ${CMAKE_SYSTEM_NAME}")
+# 查询系统名称是否在 platform_ids 列表中
+# target_include_directories(${PROJECT_NAME} PUBLIC "$<PLATFORM_ID:Windows,Linux>")
+
+# $<IF:condition,true_string,false_string>
+set(LIB3 OFF)
+# target_include_directories(${PROJECT_NAME} PUBLIC "$<IF:$<BOOL:${LIB3}>,STATIC,SHARED>") # output: SHARED
+
