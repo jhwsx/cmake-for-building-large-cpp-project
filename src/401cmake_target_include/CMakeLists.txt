@@ -25,6 +25,9 @@ target_include_directories(A PRIVATE "/A_PRIVATE")
 # INTERFACE 改变 INTERFACE_INCLUDE_DIRECTORIES
 target_include_directories(A INTERFACE "/A_INTERFACE")
 
+# 分别用 PRIVATE PUBLIC INTERFACE，查看程序输出
+target_compile_definitions(A INTERFACE VAR_A=1)
+
 # 调试属性方法
 # 1.可以使用 cmake --build build -v 查看 cmake 输出里面的信息
 
