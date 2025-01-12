@@ -28,3 +28,38 @@ if (NOT CMAKE_BUILD_TYPE)
 endif()
 message("CMAKE_BUILD_TYPE = ${CMAKE_BUILD_TYPE}")
 add_library(slib STATIC src/slib.cpp)
+
+
+# 归档输出路径，包括 windows 下的静态库 .lib 文件, 静态库的 pdb 文件和动态库的 .lib 地址文件, 动态库的 exp 文件, ;linux 和 macos 下的静态库 .a 文件
+set(OUT_LIB_PATH ${CMAKE_SOURCE_DIR}/lib)
+set(OUT_BIN_PATH ${CMAKE_SOURCE_DIR}/bin)
+set_target_properties(slib PROPERTIES
+    ARCHIVE_OUTPUT_DIRECTORY ${OUT_LIB_PATH}
+    ARCHIVE_OUTPUT_DIRECTORY_DEBUG ${OUT_LIB_PATH}/debug
+    ARCHIVE_OUTPUT_DIRECTORY_RELEASE ${OUT_LIB_PATH}/release
+)
+
+# 动态库
+add_library(dlib SHARED src/dlib.cpp include/dlib.h)
+target_include_directories(dlib PUBLIC include)
+# 指定动态库文件输出路径(只对 linux 和 macos 有效，对 windows 无效)
+set_target_properties(dlib PROPERTIES
+    LIBRARY_OUTPUT_DIRECTORY ${OUT_LIB_PATH}
+    LIBRARY_OUTPUT_DIRECTORY_DEBUG ${OUT_LIB_PATH}/debug
+    LIBRARY_OUTPUT_DIRECTORY_RELEASE ${OUT_LIB_PATH}/release
+)
+# 执行程序和windows的dll文件,动态库pdb文件输出路径
+set_target_properties(dlib PROPERTIES
+    RUNTIME_OUTPUT_DIRECTORY ${OUT_BIN_PATH}
+    RUNTIME_OUTPUT_DIRECTORY_DEBUG ${OUT_BIN_PATH}/debug
+    RUNTIME_OUTPUT_DIRECTORY_RELEASE ${OUT_BIN_PATH}/release
+)
+
+# 执行程序
+add_executable(main src/main.cpp)
+target_link_libraries(main PRIVATE dlib slib)
+set_target_properties(main PROPERTIES
+    RUNTIME_OUTPUT_DIRECTORY ${OUT_BIN_PATH}
+    RUNTIME_OUTPUT_DIRECTORY_DEBUG ${OUT_BIN_PATH}/debug
+    RUNTIME_OUTPUT_DIRECTORY_RELEASE ${OUT_BIN_PATH}/release
+)
