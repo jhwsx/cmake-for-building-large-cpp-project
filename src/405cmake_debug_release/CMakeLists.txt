@@ -70,5 +70,15 @@ set_target_properties(main PROPERTIES
     RUNTIME_OUTPUT_DIRECTORY_RELEASE ${OUT_BIN_PATH}/release
     PDB_OUTPUT_DIRECTORY ${OUT_PDB_PATH}
     PDB_OUTPUT_DIRECTORY_DEBUG ${OUT_PDB_PATH}
+
+    # 设置 vs 调试路径即工作目录，期望设置在可执行程序所在的路径
+    # 这种设置不管是哪种配置，调试路径都是一样的
+    # VS_DEBUGGER_WORKING_DIRECTORY ${OUT_BIN_PATH}
+    # 用生成器表达式来解决，对于 VS 来说会生成四遍
+    # $<CONFIG:Debug> 判断配置项是 Debug，则返回 1；否则返回 0
+    # $<IF:condition,true_string,false_string>
+    # $<IF:$<CONFIG:Debug>,debug,release> condition 为 真，则返回 debug，否则返回 release
+    VS_DEBUGGER_WORKING_DIRECTORY $<IF:$<CONFIG:Debug>,debug,release>
+
     DEBUG_POSTFIX "d"
 )
